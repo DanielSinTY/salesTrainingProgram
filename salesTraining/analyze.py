@@ -52,7 +52,7 @@ def get_large_audio_transcription(path):
             try:
                 text = r.recognize_google(audio_listened)
             except sr.UnknownValueError as e:
-                print("Error:", str(e))
+                pass
             else:
                 text = f"{text.capitalize()}. "
                 
@@ -63,6 +63,7 @@ def get_large_audio_transcription(path):
 def analyzeSpeech(model,recordingFile):
     recordingText = get_large_audio_transcription(recordingFile)
     sentences=re.split(pattern, recordingText)
+    
     if len(sentences)==0:
         
         return "error"
@@ -134,4 +135,4 @@ def analyzeSpeech(model,recordingFile):
     
     X=np.array(list(empathDict.values())+list(depDict.values())).reshape(1,-1)
     
-    return bool(model.predict(X)[0])
+    return (bool(model.predict(X)[0]),sentences)

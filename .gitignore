@@ -1,3 +1,6 @@
 trainingProgramEnv
 client_secrets.json
 salesTraining/__pycache__
+audio-chunks
+model.joblib
+temp.wav

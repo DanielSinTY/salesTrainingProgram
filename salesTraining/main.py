@@ -24,6 +24,7 @@ import joblib
 from tkinter.filedialog import askopenfilename, askopenfilenames
 import shutil
 import trainMLP
+import tkinter.scrolledtext as scrolledtext
 original=sys.stdout.write
 def redirector(inputStr):
     global trainingText
@@ -705,7 +706,7 @@ def predict():
         tk.Label(window,textvariable=analyzingText,bg="#D6F0F3",font=("Inter", 48 * -1)).place(x=20,y=140)
         window.update()
         
-        performance=analyze.analyzeSpeech(model,'temp.wav')
+        performance,sentences=analyze.analyzeSpeech(model,'temp.wav')
         
         if performance=="error":
             analyzingText.set(f"Analyzing performance:Error")
@@ -804,19 +805,27 @@ def predict():
                 width=386.0,
                 height=105.0
             )
+            transcript="Transcript:\n"
+            for sentence in sentences:
+                transcript+=sentence+'.\n'
+            txt = scrolledtext.ScrolledText(window, undo=True,height=8,width=90)
+            txt['font'] = ('consolas', '12')
+            txt.insert(tk.INSERT,transcript)
+            txt.configure(state ='disabled')
+            txt.place(x=49,y=160)
             if performance:
 
                 image_image_1 = PhotoImage(
                     file=relative_to_assets("good_image_1.png"))
                 image_1 = canvas.create_image(
                     365.0,
-                    147.0,
+                    100.0,
                     image=image_image_1
                 )
 
                 canvas.create_text(
                     401.0,
-                    120.0,
+                    100.0,
                     anchor="nw",
                     text="Successful",
                     fill="#27672A",
@@ -827,7 +836,7 @@ def predict():
                     file=relative_to_assets("bad_image_1.png"))
                 image_1 = canvas.create_image(
                 492.0,
-                158.0,
+                100.0,
                 image=image_image_1
                 )
             window.mainloop()
