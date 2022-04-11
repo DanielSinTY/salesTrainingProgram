@@ -10,9 +10,18 @@ import drive
 import joblib
 import numpy as np
 from sklearn.neural_network import MLPClassifier
+import sys
 pattern = r"[.?!]"
 lexicon = Empath()
 r = sr.Recognizer()
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 def printProgressBar (window,textVar,iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
     """
     Call in a loop to create terminal progress bar
@@ -97,7 +106,7 @@ def analyzeData(dataset,data,state,textVar,window):
 
         empathDict=lexicon.analyze("testing")
         depDict={}
-        nlp = spacy.load('en_core_web_sm')
+        nlp = spacy.load(resource_path('en_core_web_sm'))
         depList=["ROOT", "acl", "acomp", "advcl", "advmod", "agent", "amod", "appos", "attr", "aux", "auxpass", "case", "cc", "ccomp", "compound", "conj", "csubj", "csubjpass", "dative", "dep", "det", "dobj", "expl", "intj", "mark", "meta", "neg", "nmod", "npadvmod", "nsubj", "nsubjpass", "nummod", "oprd", "parataxis", "pcomp", "pobj", "poss", "preconj", "predet", "prep", "prt", "quantmod", "relcl", "xcomp"]
         for i in depList:
             depDict[i]=0.0
@@ -168,12 +177,12 @@ def train(goodData,badData,textVar,window):
     dataset=analyzeData(dataset,badData,0,textVar,window)
     drive.download("model.joblib")
 
-    if os.path.exists("model.joblib"):
-        model=joblib.load('model.joblib')
+    if os.path.exists(resource_path("model.joblib")):
+        model=joblib.load(resource_path("model.joblib"))
     else:
         model=MLPClassifier(max_iter = 500,verbose=True,textVar=textVar)
     X= np.array(dataset[0])
     y=np.array(dataset[1])
     model=model.fit(X,y)
-    joblib.dump(model,'model.joblib')
-    drive.upload('model.joblib')
+    joblib.dump(model,resource_path('model.joblib'))
+    drive.upload(resource_path('model.joblib'))

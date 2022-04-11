@@ -7,9 +7,20 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import numpy as np
+import sys
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 lexicon = Empath()
 pattern = r"[.?!]"
+
 
 
 
@@ -34,7 +45,7 @@ def get_large_audio_transcription(path):
         # keep the silence for 1 second, adjustable as well
         keep_silence=500,
     )
-    folder_name = "audio-chunks"
+    folder_name = resource_path("audio-chunks")
     # create a directory to store the audio chunks
     if not os.path.isdir(folder_name):
         os.mkdir(folder_name)
@@ -66,10 +77,10 @@ def analyzeSpeech(model,recordingFile):
     
     if len(sentences)==0:
         
-        return "error"
+        return "error",None
     empathDict=lexicon.analyze("testing")
     depDict={}
-    nlp = spacy.load('en_core_web_sm')
+    nlp = spacy.load(resource_path('en_core_web_sm'))
     depList=["ROOT", "acl", "acomp", "advcl", "advmod", "agent", "amod", "appos", "attr", "aux", "auxpass", "case", "cc", "ccomp", "compound", "conj", "csubj", "csubjpass", "dative", "dep", "det", "dobj", "expl", "intj", "mark", "meta", "neg", "nmod", "npadvmod", "nsubj", "nsubjpass", "nummod", "oprd", "parataxis", "pcomp", "pobj", "poss", "preconj", "predet", "prep", "prt", "quantmod", "relcl", "xcomp"]
     for i in depList:
         depDict[i]=0.0
@@ -116,7 +127,7 @@ def analyzeSpeech(model,recordingFile):
             
     if len(sentences)==0:
         
-        return "error"
+        return "error",None
             
         
     

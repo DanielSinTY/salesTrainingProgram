@@ -4,3 +4,5 @@ salesTraining/__pycache__
 audio-chunks
 model.joblib
 temp.wav
+build
+dist

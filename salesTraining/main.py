@@ -47,7 +47,16 @@ def int_or_str(text):
     except ValueError:
         return text
 def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+    return resource_path(ASSETS_PATH / Path(path))
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument(
@@ -88,6 +97,10 @@ window = Tk()
 
 window.geometry("960x540")
 window.geometry("+100+50")
+photo = PhotoImage(file = relative_to_assets('icon.png'))
+window.iconphoto(False, photo)
+window.winfo_toplevel().title("S.T.E.P.")
+
 window.configure(bg = "#EAFCFF")
 window.resizable(False, False)
 def uploadData():
@@ -440,7 +453,7 @@ def chooseFile():
     file_path = askopenfilename(filetypes=[('Audio',"*.wav")])
     
     if file_path is not None:
-        shutil.copy2(file_path, 'temp.wav')
+        shutil.copy2(file_path, resource_path('temp.wav'))
     
     try:
         fileMsg.destroy()
@@ -455,7 +468,7 @@ def recording():
         # soundfile expects an int, sounddevice provides a float:
         args.samplerate = int(device_info['default_samplerate'])
     if args.filename is None:
-        args.filename = "temp.wav"
+        args.filename = resource_path('temp.wav')
     if os.path.exists(args.filename):
         os.remove(args.filename)
     
@@ -626,7 +639,7 @@ def listen():
     listenBtn.destroy()
     mixer.init()
     pygame.mixer.music.set_endevent(MUSIC_END)
-    mixer.music.load('temp.wav') #Loading Music File
+    mixer.music.load(resource_path('temp.wav')) #Loading Music File
     button_image_3 = PhotoImage(
         file=relative_to_assets("stop_button_1.png"))
     stopListenBtn = Button(
@@ -690,26 +703,26 @@ def predict():
         i.destroy()
     window.update()
     loadingModelText=tk.StringVar()
-    loadingModelText.set("Loding Model:...")
+    loadingModelText.set("Loading Model:...")
     
     tk.Label(window,textvariable=loadingModelText,bg="#D6F0F3",font=("Inter", 48 * -1)).place(x=20,y=20)
     window.update()
     drive.download("model.joblib")
 
-    if os.path.exists("model.joblib"):
+    if os.path.exists(resource_path("model.joblib")):
         
-        model=joblib.load(f'model.joblib')
-        loadingModelText.set("Loding Model: Completed")
+        model=joblib.load(resource_path("model.joblib"))
+        loadingModelText.set("Loading Model: Completed")
         analyzingText=tk.StringVar()
         analyzingText.set("Analyzing performance:...")
         
         tk.Label(window,textvariable=analyzingText,bg="#D6F0F3",font=("Inter", 48 * -1)).place(x=20,y=140)
         window.update()
         
-        performance,sentences=analyze.analyzeSpeech(model,'temp.wav')
+        performance,sentences=analyze.analyzeSpeech(model,resource_path('temp.wav'))
         
         if performance=="error":
-            analyzingText.set(f"Analyzing performance:Error")
+            analyzingText.set("Analyzing performance:Error")
             for i in window.winfo_children():
                 i.destroy()
             canvas = Canvas(
@@ -872,7 +885,12 @@ def predict():
                 height=105.0
             )
         window.mainloop()
-        
+
+def delModel():
+    MsgBox = tk.messagebox.askquestion ('Delete Model','Are you sure you want to delete the model?',icon = 'warning')
+    if MsgBox == 'yes':
+       drive.delete('model.joblib')
+       tk.messagebox.showinfo('Model Deleted','The model is deleted.')      
         
 def home():
     if mixer.get_init():
@@ -929,7 +947,7 @@ def home():
         image=button_image_3,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("deleteBtn clicked"),
+        command=delModel,
         relief="flat"
     )
     deleteBtn.place(
