@@ -37,12 +37,12 @@ Follow the instruction [here](https://pythonhosted.org/PyDrive/quickstart.html#a
 
 
 ###Usage
-[1. Configuring Google Drive](#1.-Configuring-Google-Drive)
-[2. Authetication for Google Drive](#2.-Authetication-for-Google-Drive)
-[3. General Usage](#3.-General-Usage)
-[4. Analysing sales speech](#4.-Analysing-sales-speech)
-[5. Training the AI model](#5.-Training-the-AI-model)
-[6. Deleting the AI model](#6.-Deleting-the-AI-model)
+[1. Configuring Google Drive](#1-Configuring-Google-Drive)
+[2. Authetication for Google Drive](#2-Authetication-for-Google-Drive)
+[3. General Usage](#3-General-Usage)
+[4. Analysing sales speech](#4-Analysing-sales-speech)
+[5. Training the AI model](#5-Training-the-AI-model)
+[6. Deleting the AI model](#6-Deleting-the-AI-model)
 
 
 ##### 1. Configuring Google Drive
