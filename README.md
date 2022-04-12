@@ -87,7 +87,7 @@ By clicking **Train**, *STEP* will prompt you to upload files of previous succes
 
 <img src="https://imgur.com/pHcHYyK.png" height="300">
 
-After uploading all the files, click **Start training** and *STEP* will start training the MLP model with the files uploaded. *STEP* will first extract features from all the files, and then feed into the MLP model to train it. Progress bar of feature extraction and iteration number during feeding will be shown on the screen. The process may a few minutes to couple of hours depending on size of dataset (number of files uploaded) and computing power. If a model exists in the Google Drive, *STEP* will train that model using the new files uploaded. A new MLP model will be created otherwise.
+After uploading all the files, click **Start training** and *STEP* will start training the MLP model with the files uploaded. *STEP* will first extract features from all the files, and then feed into the MLP model to train it. Progress bar of feature extraction and iteration number during feeding will be shown on the screen. The process may take a few minutes to couple of hours depending on size of dataset (number of files uploaded) and computing power. If a model exists in the Google Drive, *STEP* will train that model using the new files uploaded. A new MLP model will be created otherwise.
 
 When you see <img src="https://imgur.com/F9Jkgoy.png" height="20">, the MLP model has been successfully trained and uploaded to the Google Drive Folder named `model` and you can use it to analyse sales speech.
 
