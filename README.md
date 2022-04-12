@@ -1,4 +1,4 @@
-# Sales Training & Evalutaion Program (STEP)
+# Sales Training & Evaluation Program (STEP)
 <img src="https://imgur.com/wT9rOxs.png" width="400">
 A software using MLP (MultiLayer Perceptron) neural network,NLP and speech to text that can learn and evaluate past salesperson's speech patterns and their effect on customers' purchasing decisions and predict customers' purchasing decision from sales rep's speech.
 
