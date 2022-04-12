@@ -26,6 +26,8 @@ import shutil
 import trainMLP
 import tkinter.scrolledtext as scrolledtext
 original=sys.stdout.write
+
+# Redirect the print function so that verbose of sklearn can be shown on tkinter window
 def redirector(inputStr):
     global trainingText
     global window
@@ -35,17 +37,15 @@ def redirector(inputStr):
     
     trainingText.set(f"Analyzing successful data: |{bar}| {100}% Completed\nAnalyzing poor data: |{bar}| {100}% Completed\n"+inputStr.strip())
     window.update()
-mixer.init()
-MUSIC_END = pygame.USEREVENT+1
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("./assets")
-pygame.init()
+
 def int_or_str(text):
     """Helper function for argument parsing."""
     try:
         return int(text)
     except ValueError:
         return text
+
+# Get path to assets for tkinter to load button images
 def relative_to_assets(path: str) -> Path:
     return resource_path(ASSETS_PATH / Path(path))
 
@@ -58,6 +58,12 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
+# Initialize all recording and playback device
+mixer.init()
+MUSIC_END = pygame.USEREVENT+1
+OUTPUT_PATH = Path(__file__).parent
+ASSETS_PATH = OUTPUT_PATH / Path("./assets")
+pygame.init()
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument(
     '-l', '--list-devices', action='store_true',
@@ -93,6 +99,7 @@ def callback(indata, frames, time, status):
         print(status, file=sys.stderr)
     q.put(indata.copy())
 
+#Initialize the program window
 window = Tk()
 
 window.geometry("960x540")
@@ -103,6 +110,8 @@ window.winfo_toplevel().title("S.T.E.P.")
 
 window.configure(bg = "#EAFCFF")
 window.resizable(False, False)
+
+#Screen shown to ask users to upload files to train the model
 def uploadData():
     global goodFiles
     global badFiles
@@ -185,6 +194,8 @@ def uploadData():
         height=103.0
     )
     window.mainloop()
+
+# Screen shown when training the model
 def trainModel():
     global trainingText
     
@@ -258,6 +269,7 @@ def trainModel():
     window.mainloop()
 
 
+# Allows users to upload files for training
 def uploadDataFiles(type):
     global goodFiles
     global badFiles
@@ -291,6 +303,8 @@ def uploadDataFiles(type):
         
         badFiles=files
     window.mainloop()
+
+# Screen shown when users want to analyse a speech
 def startAnalysis():
     if mixer.get_init():
         mixer.music.stop()
@@ -367,6 +381,8 @@ def startAnalysis():
         font=("ABeeZee Regular", 48 * -1)
     )
     window.mainloop()
+
+# Screen shown for users to upload audio file for analysis
 def upload():
     for i in window.winfo_children():
         i.destroy()
@@ -453,6 +469,8 @@ def upload():
         height=112.0
     )
     window.mainloop()
+
+# Allows user to choose file to be analysed
 def chooseFile():
     global fileMsg
     file_path = askopenfilename(filetypes=[('Audio',"*.wav")])
@@ -465,6 +483,8 @@ def chooseFile():
     except NameError:
         pass
     fileMsg=tk.Message(window,text=file_path,bg="#FFFFFF",font=("Inter", 24 * -1),width=450).place(x=448,y=150)
+
+# Initializzation for recording
 def recording():
     global q
     
@@ -489,6 +509,8 @@ def recording():
                     file.close()
                     break
                 file.write(q.get())
+
+# Count the time passed since starting recording
 def countTime():
     global elapsedTimeText
     startTime=time.time()
@@ -504,6 +526,8 @@ def countTime():
         
         
         elapsedTimeText.set(f"{h:02d}:{m:02d}:{s:02d}")
+
+# Check when the recording playback has finished
 def check_event():
     for event in pygame.event.get():
         if event.type == MUSIC_END:
@@ -512,6 +536,8 @@ def check_event():
             pygame.event.clear()
 
     window.after(100, check_event)
+
+# Start the recording
 def startRec():
     global startRecBtn
     global myrecording
@@ -526,7 +552,7 @@ def startRec():
    
     recThread=threading.Thread(target=recording)
     recThread.start()
-    #myrecording=sd.rec(int(3600 * 48000 ), samplerate=48000 , channels=1)
+    
     button_image_1 = PhotoImage(
     file=relative_to_assets("stop_button_1.png"))
     button_1 = Button(
@@ -549,6 +575,8 @@ def startRec():
     timeThread=threading.Thread(target=countTime)
     timeThread.start()
     window.mainloop()
+
+# Stop the recording
 def stopRec():
     global myrecording
     global parser
@@ -558,6 +586,8 @@ def stopRec():
     global stopTimeThread
     stopTimeThread=True
     finishRec()
+
+# Screen shown when users have finished recording or uploaded an audio file to be analysed
 def finishRec():
     global listenBtn
     
@@ -638,6 +668,8 @@ def finishRec():
         height=108.0
     )
     window.mainloop()
+
+# Play the recorded/uploaded audio,change the listen button to stop button
 def listen():
     global listenBtn
     global stopListenBtn
@@ -661,6 +693,8 @@ def listen():
     )
     mixer.music.play()
     window.mainloop()
+
+# Stop the playback of recording, change the stop button back to listen to recording button
 def stopListen():
     global listenBtn
     global stopListenBtn
@@ -684,22 +718,8 @@ def stopListen():
         height=114.0
     )
     window.mainloop()
-    # sd.stop()
-
-    # myrecording=np.trim_zeros(myrecording)
-    # sd.play(myrecording,48000)
-    # #Normalize. Since it is recorded with 16 bits of quantization bit, it is maximized in the range of int16.
-    # data = myrecording / myrecording.max() * np.iinfo(np.int16).max
-
-    # # float -> int
-    # data = data.astype(np.int16)
-
-    # #Save file
-    # with wave.open("temp.wav", mode='wb') as wb:
-    #     wb.setnchannels(1)  
-    #     wb.setsampwidth(2)  # 16bit=2byte
-    #     wb.setframerate(48_000)
-    #     wb.writeframes(data.tobytes())  #Convert to byte string
+    
+# Analyse the recording and predict customers' purchasing decision
 def predict():
     if mixer.get_init():
         mixer.music.stop()
@@ -891,12 +911,14 @@ def predict():
             )
         window.mainloop()
 
+# Delete the AI model
 def delModel():
     MsgBox = tk.messagebox.askquestion ('Delete Model','Are you sure you want to delete the model?',icon = 'warning')
     if MsgBox == 'yes':
        drive.delete('model.joblib')
        tk.messagebox.showinfo('Model Deleted','The model is deleted.')      
-        
+
+# Home screen shown when the app is initialized       
 def home():
     if mixer.get_init():
         mixer.music.stop()

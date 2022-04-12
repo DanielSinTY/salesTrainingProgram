@@ -21,6 +21,8 @@ gauth.LocalWebserverAuth()
 
 drive = GoogleDrive(gauth)
 folder_id=None
+
+# Upload file to Google Drive in the folder 'model' and overwrite 'model.joblib'
 def upload(upload_file):
     global folder_id
     file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
@@ -39,6 +41,8 @@ def upload(upload_file):
 	# Read file and set it as the content of this instance.
     gfile.SetContentFile(upload_file)
     gfile.Upload() # Upload the file.
+
+# Download file from Google Drive in the folder 'model'
 def download(download_file):
     global folder_id
     file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
@@ -51,7 +55,7 @@ def download(download_file):
         if file['title']==download_file:
             file.GetContentFile(resource_path(file['title']),mimetype="application/octet-stream")
             
-
+# Delete file in Google Drive in the folder 'model'
 def delete(delete_file):
     global folder_id
     file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()

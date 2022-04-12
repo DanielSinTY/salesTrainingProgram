@@ -71,6 +71,7 @@ def get_large_audio_transcription(path):
     # return the text for all chunks detected
     return whole_text
 
+# Parse the text to extract features on use of words and sentence patterns, predict customers' purchasing decision using modle, and return the predicted value
 def analyzeSpeech(model,recordingFile):
     recordingText = get_large_audio_transcription(recordingFile)
     sentences=re.split(pattern, recordingText)

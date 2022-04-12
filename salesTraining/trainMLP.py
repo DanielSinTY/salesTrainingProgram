@@ -90,6 +90,7 @@ def get_large_audio_transcription(path):
     # return the text for all chunks detected
     return whole_text
 
+# Parse the audio/text file and return the dataset with features from data files
 def analyzeData(dataset,data,state,textVar,window):
     if state==1:
         progressbarPrefix="Analyzing successful data:"
@@ -175,7 +176,7 @@ def analyzeData(dataset,data,state,textVar,window):
     return dataset
             
 
-
+# Extract features from audio/text files and feed them into the MLP model
 def train(goodData,badData,textVar,window):
     dataset=[[],[]]
     dataset=analyzeData(dataset,goodData,1,textVar,window)
