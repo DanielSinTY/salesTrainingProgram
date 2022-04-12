@@ -31,7 +31,7 @@ def upload(upload_file):
     file_list = drive.ListFile({'q': "'{}' in parents and trashed=false".format(folder_id)}).GetList()
     for i, file in enumerate(sorted(file_list, key = lambda x: x['title']), start=1):
         
-        if file['title']==upload_file:
+        if file['title']=='model.joblib':
             id=file['id']
             gfile = drive.CreateFile({'id':id,'parents': [{'id': folder_id}]})
     if not gfile:

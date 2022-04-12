@@ -80,7 +80,11 @@ def analyzeSpeech(model,recordingFile):
         return "error",None
     empathDict=lexicon.analyze("testing")
     depDict={}
-    nlp = spacy.load(resource_path('en_core_web_sm'))
+    try:
+        nlp = spacy.load('en_core_web_sm')
+    except:
+        #load model from working directory
+        nlp = spacy.load(resource_path('en_core_web_sm'))
     depList=["ROOT", "acl", "acomp", "advcl", "advmod", "agent", "amod", "appos", "attr", "aux", "auxpass", "case", "cc", "ccomp", "compound", "conj", "csubj", "csubjpass", "dative", "dep", "det", "dobj", "expl", "intj", "mark", "meta", "neg", "nmod", "npadvmod", "nsubj", "nsubjpass", "nummod", "oprd", "parataxis", "pcomp", "pobj", "poss", "preconj", "predet", "prep", "prt", "quantmod", "relcl", "xcomp"]
     for i in depList:
         depDict[i]=0.0

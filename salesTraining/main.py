@@ -104,6 +104,10 @@ window.winfo_toplevel().title("S.T.E.P.")
 window.configure(bg = "#EAFCFF")
 window.resizable(False, False)
 def uploadData():
+    global goodFiles
+    global badFiles
+    goodFiles=[]
+    badFiles=[]
     for i in window.winfo_children():
         i.destroy()
     canvas = Canvas(
@@ -183,6 +187,7 @@ def uploadData():
     window.mainloop()
 def trainModel():
     global trainingText
+    
     for i in window.winfo_children():
         i.destroy()
     canvas = Canvas(

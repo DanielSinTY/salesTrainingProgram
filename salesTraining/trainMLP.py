@@ -35,6 +35,9 @@ def printProgressBar (window,textVar,iteration, total, prefix = '', suffix = '',
         fill        - Optional  : bar fill character (Str)
         printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
     """
+    if total==0:
+        iteration=1
+        total=1
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
@@ -61,7 +64,7 @@ def get_large_audio_transcription(path):
         # keep the silence for 1 second, adjustable as well
         keep_silence=500,
     )
-    folder_name = "audio-chunks"
+    folder_name = resource_path("audio-chunks")
     # create a directory to store the audio chunks
     if not os.path.isdir(folder_name):
         os.mkdir(folder_name)
@@ -79,7 +82,7 @@ def get_large_audio_transcription(path):
             try:
                 text = r.recognize_google(audio_listened)
             except sr.UnknownValueError as e:
-                print("Error:", str(e))
+                pass
             else:
                 text = f"{text.capitalize()}. "
                 
@@ -95,78 +98,80 @@ def analyzeData(dataset,data,state,textVar,window):
         progressbarPrefix=f'Analyzing successful data: |{bar}| {100}% Completed\nAnalyzing poor data:'
     printProgressBar(window,textVar,0, len(data), prefix = progressbarPrefix, suffix = 'Complete', length = 50)
     for order,i in enumerate(data):
-    
-        if i[-3:]=='txt':
-            with open(i,'r') as f:
-                text=f.read()
+        try:
+            if i[-3:]=='txt':
+                with open(i,'r') as f:
+                    text=f.read()
 
-        else:
-            text = get_large_audio_transcription(i)
-        sentences=re.split(pattern, text)
+            else:
+                text = get_large_audio_transcription(i)
+            sentences=re.split(pattern, text)
 
-        empathDict=lexicon.analyze("testing")
-        depDict={}
-        nlp = spacy.load(resource_path('en_core_web_sm'))
-        depList=["ROOT", "acl", "acomp", "advcl", "advmod", "agent", "amod", "appos", "attr", "aux", "auxpass", "case", "cc", "ccomp", "compound", "conj", "csubj", "csubjpass", "dative", "dep", "det", "dobj", "expl", "intj", "mark", "meta", "neg", "nmod", "npadvmod", "nsubj", "nsubjpass", "nummod", "oprd", "parataxis", "pcomp", "pobj", "poss", "preconj", "predet", "prep", "prt", "quantmod", "relcl", "xcomp"]
-        for i in depList:
-            depDict[i]=0.0
-        for i,value in empathDict.items():
-            empathDict[i]=0.0
+            empathDict=lexicon.analyze("testing")
+            depDict={}
+            nlp = spacy.load(resource_path('en_core_web_sm'))
+            depList=["ROOT", "acl", "acomp", "advcl", "advmod", "agent", "amod", "appos", "attr", "aux", "auxpass", "case", "cc", "ccomp", "compound", "conj", "csubj", "csubjpass", "dative", "dep", "det", "dobj", "expl", "intj", "mark", "meta", "neg", "nmod", "npadvmod", "nsubj", "nsubjpass", "nummod", "oprd", "parataxis", "pcomp", "pobj", "poss", "preconj", "predet", "prep", "prt", "quantmod", "relcl", "xcomp"]
+            for i in depList:
+                depDict[i]=0.0
+            for i,value in empathDict.items():
+                empathDict[i]=0.0
 
 
-        for i in range(len(sentences)-1,-1,-1):
-           
-            sentences[i]=sentences[i].strip()
-            if not sentences[i]:
-                sentences.pop(i)
-                continue
-            sentenceDict=lexicon.analyze(sentences[i])
-            total=0
-            for j,value in sentenceDict.items():
+            for i in range(len(sentences)-1,-1,-1):
+            
+                sentences[i]=sentences[i].strip()
+                if not sentences[i]:
+                    sentences.pop(i)
+                    continue
+                sentenceDict=lexicon.analyze(sentences[i])
+                total=0
+                for j,value in sentenceDict.items():
+                    
+                    total+=value
+                if total==0:
+                    total=1
                 
-                total+=value
-            if total==0:
-                total=1
-            
-            for j,value in sentenceDict.items():
+                for j,value in sentenceDict.items():
 
-                empathDict[j]+=value/total
-            
-            doc=nlp(sentences[i])
-            sentenceDepDict={}
-            for depName in depList:
-                sentenceDepDict[depName]=0.0
-            for token in doc:
+                    empathDict[j]+=value/total
                 
-                if token.dep_ in sentenceDepDict.keys():
-                    sentenceDepDict[token.dep_]+=1
-            
-            total=0
-            for j,value in sentenceDepDict.items():
+                doc=nlp(sentences[i])
+                sentenceDepDict={}
+                for depName in depList:
+                    sentenceDepDict[depName]=0.0
+                for token in doc:
+                    
+                    if token.dep_ in sentenceDepDict.keys():
+                        sentenceDepDict[token.dep_]+=1
                 
-                total+=value
-            
-            
-            for j,value in sentenceDepDict.items():
-                if j in depDict.keys():
-                    depDict[j]+=value/total
+                total=0
+                for j,value in sentenceDepDict.items():
+                    
+                    total+=value
                 
-            
                 
-            
-       
-       
-        for i,value in empathDict.items():
-            empathDict[i]=value/len(sentences)
-            
-
+                for j,value in sentenceDepDict.items():
+                    if j in depDict.keys():
+                        depDict[j]+=value/total
+                    
+                
+                    
+                
         
         
-        for i,value in depDict.items():
-            depDict[i]=value/len(sentences)
-        dataset[0].append(list(empathDict.values())+list(depDict.values()))
-        dataset[1].append(state)
-        printProgressBar(window,textVar,order+1, len(data), prefix = progressbarPrefix, suffix = 'Complete', length = 50)
+            for i,value in empathDict.items():
+                empathDict[i]=value/len(sentences)
+                
+
+            
+            
+            for i,value in depDict.items():
+                depDict[i]=value/len(sentences)
+            dataset[0].append(list(empathDict.values())+list(depDict.values()))
+            dataset[1].append(state)
+            printProgressBar(window,textVar,order+1, len(data), prefix = progressbarPrefix, suffix = 'Complete', length = 50)
+        except:
+            continue
     return dataset
             
 
@@ -183,6 +188,7 @@ def train(goodData,badData,textVar,window):
         model=MLPClassifier(max_iter = 500,verbose=True,textVar=textVar)
     X= np.array(dataset[0])
     y=np.array(dataset[1])
-    model=model.fit(X,y)
+    if len(y)>0:
+        model=model.fit(X,y)
     joblib.dump(model,resource_path('model.joblib'))
     drive.upload(resource_path('model.joblib'))
