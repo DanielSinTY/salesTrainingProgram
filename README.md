@@ -27,8 +27,8 @@ a software using MLP (MultiLayer Perceptron) neural network,NLP and speech to te
 ## Windows Executable
 ### Download the .exe
 The Windows executable file can be downloaded here:
-https://drive.google.com/drive/folders/1bmHq8j93-mv87ilJEhM17VJnQAVje5HQ?usp=sharing
-It is built using PyInstaller with main.spec
+https://drive.google.com/drive/folders/1bmHq8j93-mv87ilJEhM17VJnQAVje5HQ?usp=sharing.
+It is built using PyInstaller with `main.spec`.
 
 ## Open with Python
 ### 1. Cloning this repository
