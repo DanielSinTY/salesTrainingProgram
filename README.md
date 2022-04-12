@@ -1,4 +1,5 @@
 # Sales Training & Evalutaion Program (STEP)
+<img src="https://imgur.com/wT9rOxs.png" width="400">
 a software using MLP (MultiLayer Perceptron) neural network,NLP and speech to text that can learn and evaluate past salesperson's speech patterns and their effect on customers' purchasing decisions and predict customers' purchasing decision from sales rep's speech.
 
 ### Features
@@ -16,6 +17,18 @@ a software using MLP (MultiLayer Perceptron) neural network,NLP and speech to te
 ##### Download the .exe
 The Windows executable file can be downloaded here:
 https://drive.google.com/drive/folders/1bmHq8j93-mv87ilJEhM17VJnQAVje5HQ?usp=sharing
+
+### Open with Python
+##### 1. Cloning this repository
+Clone this repo with `git clone https://github.com/DanielSinTY/salesTrainingProgram.git` or using GitHub desktop.
+##### 2. Installing required modules and packages
+All required modules and packages are listed in requirements.txt. Use `pip install -r requirements.txt` to install all the packages and modules needed. You may want to use a virtual environment for this.
+
+##### 3. Configuring Google Drive API
+Follow the instruction [here](https://pythonhosted.org/PyDrive/quickstart.html#authentication "here") (https://pythonhosted.org/PyDrive/quickstart.html#authentication) to create an API to be used by PyDrive to connect to Google Drive. Remember to rename the downloaded json file as `client_secrets.json` and place it in the working directory.
+
+
+
 
 ###Usage
 
