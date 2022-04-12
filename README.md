@@ -2,11 +2,16 @@
 <img src="https://imgur.com/wT9rOxs.png" width="400">
 a software using MLP (MultiLayer Perceptron) neural network,NLP and speech to text that can learn and evaluate past salesperson's speech patterns and their effect on customers' purchasing decisions and predict customers' purchasing decision from sales rep's speech.
 
-###Table of Contents
+### Table of Contents
+
 [1. Features](#features)
+
 [2. Windows Executable](#Windows-Executable)
+
 [3. Usage](#Usage)
+
 [4. Modules Used](#Modules-Used)
+
 
 ### Features
 
@@ -36,12 +41,18 @@ Follow the instruction [here](https://pythonhosted.org/PyDrive/quickstart.html#a
 
 
 
-###Usage
+### Usage
+
 [1. Configuring Google Drive](#1-Configuring-Google-Drive)
+
 [2. Authetication for Google Drive](#2-Authetication-for-Google-Drive)
+
 [3. General Usage](#3-General-Usage)
+
 [4. Analysing sales speech](#4-Analysing-sales-speech)
+
 [5. Training the AI model](#5-Training-the-AI-model)
+
 [6. Deleting the AI model](#6-Deleting-the-AI-model)
 
 
