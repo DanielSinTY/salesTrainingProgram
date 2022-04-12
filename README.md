@@ -3,10 +3,10 @@
 a software using MLP (MultiLayer Perceptron) neural network,NLP and speech to text that can learn and evaluate past salesperson's speech patterns and their effect on customers' purchasing decisions and predict customers' purchasing decision from sales rep's speech.
 
 ###Table of Contents
-[1. Features](#Features)
-[2. Windows Executable](#Windows Executable)
+[1. Features](#features)
+[2. Windows Executable](#Windows-Executable)
 [3. Usage](#Usage)
-[4. Modules Used](#Modules Used)
+[4. Modules Used](#Modules-Used)
 
 ### Features
 
@@ -37,12 +37,12 @@ Follow the instruction [here](https://pythonhosted.org/PyDrive/quickstart.html#a
 
 
 ###Usage
-[1. Configuring Google Drive](#1. Configuring Google Drive)
-[2. Authetication for Google Drive](#2. Authetication for Google Drive)
-[3. Genral Usage](#3. Genral Usage)
-[4. Analysing sales speech](#4. Analysing sales speech)
-[5. Training the AI model](#5. Training the AI model)
-[6. Deleting the AI model](#6. Deleting the AI model)
+[1. Configuring Google Drive](#1.-Configuring-Google-Drive)
+[2. Authetication for Google Drive](#2.-Authetication-for-Google-Drive)
+[3. General Usage](#3.-General-Usage)
+[4. Analysing sales speech](#4.-Analysing-sales-speech)
+[5. Training the AI model](#5.-Training-the-AI-model)
+[6. Deleting the AI model](#6.-Deleting-the-AI-model)
 
 
 ##### 1. Configuring Google Drive
@@ -54,7 +54,7 @@ Open the .exe file or run main.py in `/salesTraining` and *STEP* will open your 
 
 <img src="https://i.imgur.com/nRAPGR5.png" width="200">
 
-##### 3. Genral Usage
+##### 3. General Usage
 After authetication, the GUI of *STEP* will pop up. Click **Analyse** to predict customers' purchasing decision from a sales rep's speech. Click **Train** to train the AI model with previous sales reps' speech. Click **Delete** to delete the AI model.
 
 <img src="https://imgur.com/dkMPJD2.png" height="300">
