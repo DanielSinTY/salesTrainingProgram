@@ -1,5 +1,6 @@
 # Sales Training & Evaluation Program (STEP)
 <img src="https://imgur.com/wT9rOxs.png" width="400">
+
 A software using MLP (MultiLayer Perceptron) neural network,NLP and speech to text that can learn and evaluate past salesperson's speech patterns and their effect on customers' purchasing decisions and predict customers' purchasing decision from sales rep's speech.
 
 ## Table of Contents
@@ -107,6 +108,12 @@ After successfully deleting the model, another info box will be shown. You can t
 The following modules are used in STEP:
 - **scikit-learn**
 	to train and use the MLP model
+- **joblib**
+	to store and load MLP model
+- **pydub**
+	to manipulate audio
+- **SpeechRecognition**
+	to connect to Google speech recognition API and perform speech to text transcription
 - **Empath**
 	to analyse and categorize the words in speech
 - **SpaCy**
@@ -115,6 +122,8 @@ The following modules are used in STEP:
 	 to connect to Google Drive
 - **soundDevice** and **soundFile**
 	to record audio
+- **numpy**
+	to manipulate array
 - **pygame**
 	to play the recording
 - **Tkinter**
